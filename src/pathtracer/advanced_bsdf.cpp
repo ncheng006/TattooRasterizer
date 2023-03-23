@@ -136,7 +136,7 @@ namespace CGL {
 
         // TODO Project 3-2: Part 1
         // Implement reflection of wo about normal (0,0,1) and store result in wi.
-
+        *wi = -wo + 2 * (wo * Vector3D(0, 0, 1)) * Vector3D(0, 0, 1);
 
     }
 
