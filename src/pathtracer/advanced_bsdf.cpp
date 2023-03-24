@@ -199,7 +199,7 @@ namespace CGL {
         double R = R0 + (1.0 - R0) * pow((1.0 - abs_cos_theta(wo)), 5);
         
         if (coin_flip(R)) {
-            bool refracted = refract(wo, wi, ior);
+            reflect(wo, wi);
             *pdf = R;
             return R * reflectance / abs_cos_theta(*wi);
         } else {
