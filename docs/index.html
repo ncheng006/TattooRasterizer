@@ -2,23 +2,32 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <style>  
-    div.padded {  
-      padding-top: 0px;  
-      padding-right: 100px;  
-      padding-bottom: 0.25in;  
-      padding-left: 100px;  
-    }  
+    body {
+        background-color: white;
+        padding: 100px;
+        width: 1000px;
+        margin: auto;
+        text-align: left;
+        font-weight: 300;
+        font-family: 'Open Sans', sans-serif;
+        color: #121212;
+    }
+    h1, h2, h3, h4 {
+        font-family: 'Source Sans Pro', sans-serif;
+    }
+    kbd {
+        color: #121212;
+    }
   </style> 
-<title>Your Name  |  CS 184</title>
+<title>Path Tracer Pt. 2  |  CS 184</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" type="text/css" href="style.css" media="screen" />
+<link href="https://fonts.googleapis.com/css?family=Open+Sans|Source+Sans+Pro" rel="stylesheet">
 </head>
 <body>
 <br />
 <h1 align="middle">Assignment 3-2: Additional Features to PathTracer</h1>
     <h2 align="middle">Michelle Chen + Jojo Chen, CS184-chens-3-2</h2>
-    <h2 align="middle">https://mchen9129.github.io/project-webpages-sp23-mchen9129/proj3-2/index.html</h2>
-
+    <h3 align="middle">Website URL: <a href="https://mchen9129.github.io/project-webpages-sp23-mchen9129/proj3-2/index.html">https://mchen9129.github.io/project-webpages-sp23-mchen9129/proj3-2/index.html</a></h3>
     <div class="padded">
 
         
@@ -77,16 +86,60 @@
         <br>
         <p><b>
             Point out the new multibounce effects that appear in each image. 
-        </b></p>
-        <p>
-            Your response goes here.
-        </p>
-        <br>
-        <p><b>
             Explain how these bounce numbers relate to the particular effects that appear. Make sure to include all screenshots.
         </b></p>
         <p>
-            Your response goes here.
+            0 bounces: The entire image is dark (except for the light source) since the light rays have not bounced off any surfaces.
+            <br>
+            <br>
+            1 bounce: You can now see the walls of the box and a highlight on the mirror ball from the light source reflecting off of it. Since the light ray has only bounced once, you don't see the colors from walls reflected on the mirror ball at this stage. On the glass ball, you also similarly see the reflection of the area light off of the ball. Since the sphere is also refractive, some light rays have entered the ball but have not yet exited, resulting in the reflection of the light being less clear than on the mirror ball. Refraction hasn't yet occurred at this stage for the same reason.
+            <br>
+            <br>
+            <img src="images/1-bounce-glass.png" align="middle" width="200px"/>
+            <br>
+            <br>
+            2 bounces: On the mirror ball, the light bounces off the walls and onto the sphere, creating the reflection of the walls on the sphere. There is generally more light in the scene now and you can see the light hit the ceiling as well. The glass ball still doesn't show the refraction yet but you can see where the light rays that entered the ball exit the ball near the bottom and how they bounce off the floor to create a slight highlight around the bottom rim. There is also some reflection of the walls on the ball, but to a lesser degree than the fully reflective mirror ball.
+            <br>
+            <br>
+            <img src="images/2-bounce-glass.png" align="middle" width="200px"/>
+            <br>
+            <br>
+            3 bounces: The mirror ball looks pretty much the same but with more bounces, the reflections as well as the entire scene appears brighter. You can also notice that the light now bounces off of the ceiling and reflects off of the ball, where previously the ceiling reflected on the ball appeared pitch black despite actually being lit in the scene. The refraction in the glass ball is now visible, and you can see a highlight on the ground within the shadow cast by the ball where the light enters the sphere and bounces off of the floor.
+            <br>
+            <br>
+            <img src="images/3-bounce.png" align="middle" width="200px"/>
+            <br>
+            <br>
+            4 bounces: The mirror ball looks the same as the 3 bounce mirror ball except slightly brighter. The one major difference is that the light that bounced off the walls and entered the refractive glass ball is now able to exit the glass ball and reflect off of the mirror ball. This is why the reflection of the glass ball on the surface of the mirror ball now appears purple instead of black.
+            <br>
+            <div align="middle">
+                <table style="width:100%">
+                    <tr>
+                        <td>
+                        <img src="images/4-black.png" align="middle" width="150px"/>
+                        <figcaption>Mirror ball reflection with 3 bounces</figcaption>
+                        </td>
+                        <td>
+                            <img src="images/4-purple.png" align="middle" width="150px"/>
+                            <figcaption>Mirror ball reflection with 4 bounces</figcaption>
+                        </td>
+                    </tr>            
+                </table>
+            </div>
+            <br>
+            The glass ball also looks largely the same, with the biggest difference being that the light that passed through the ball onto the floor has now bounced off of the floor and reflects off of the ball near the bottom, and in a small patch, on the right wall.  
+            <br>
+            <br>
+            <img src="images/4-wall.png" align="middle" width="300px"/>
+            <br>
+            <br>
+            5 bounces: This scene looks almost identical to the 4 bounce scene. The only difference is that the glass ball appears brighter due to more rays of light refracting through it.
+            <br>
+            <br>
+            100 bounces: Again, this scene looks basically the same but the additional bounces make the colors appear brighter. At the top of the ball near the reflection of the area light, you can also see a few more specks of highlight where light rays bounce onto and reflect off of the ball.
+            <br>
+            <br>
+            <img src="images/100.png" align="middle" width="200px"/>
         </p>
         <br>
 
