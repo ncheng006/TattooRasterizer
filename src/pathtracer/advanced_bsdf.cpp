@@ -44,22 +44,45 @@ namespace CGL {
         // TODO Project 3-2: Part 2
         // Compute Beckmann normal distribution function (NDF) here.
         // You will need the roughness alpha.
-        return 1.0;
+      
+        double a = 0.05; // roughness alpha
+
+        double theta = getTheta(h);
+        double exponent = (-tan(theta) * tan(theta)) / (a * a);
+        double numerator = exp(exponent);
+        double denominator = PI * a * a * pow(cos(theta), 4);
+    
+
+        return numerator / denominator;
     }
 
     Vector3D MicrofacetBSDF::F(const Vector3D wi) {
         // TODO Project 3-2: Part 2
         // Compute Fresnel term for reflection on dielectric-conductor interface.
         // You will need both eta and etaK, both of which are Vector3D.
+        double costheta = cos(getTheta(wi));
+        Vector3D eta_2_k_2 = eta * eta + k * k;
+        
+        Vector3D rs = (eta_2_k_2 - 2 * eta * costheta + pow(costheta, 2)) / (eta_2_k_2 + 2 * eta * costheta +  pow(costheta, 2));
+        
+        Vector3D rp = (eta_2_k_2 *  pow(costheta, 2) - 2 * eta * costheta + 1) / (eta_2_k_2 *  pow(costheta, 2) + 2 * eta * costheta + 1);
 
-        return Vector3D();
+        return (rs + rp)/2;
     }
 
     Vector3D MicrofacetBSDF::f(const Vector3D wo, const Vector3D wi) {
         // TODO Project 3-2: Part 2
         // Implement microfacet model here.
+      
+        Vector3D n(0,0,1); // macro surface normal
+        Vector3D h = wi + wo; // the half vector
+        h.normalize();
 
-        return Vector3D();
+        Vector3D numerator = F(wi) * G(wo,wi) * D(h);
+        Vector3D denominator = 4 * dot(n, wo) * dot(n, wi);
+
+        return numerator / denominator;
+
     }
 
     Vector3D MicrofacetBSDF::sample_f(const Vector3D wo, Vector3D* wi, double* pdf) {
@@ -68,6 +91,7 @@ namespace CGL {
         // Note: You should fill in the sampled direction *wi and the corresponding *pdf,
         //       and return the sampled BRDF value.
 
+        // Default cosine hemisphere sampling code
         *wi = cosineHemisphereSampler.get_sample(pdf);
         return MicrofacetBSDF::f(wo, *wi);
     }
