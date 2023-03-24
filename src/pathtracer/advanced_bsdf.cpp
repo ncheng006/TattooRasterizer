@@ -22,7 +22,13 @@ namespace CGL {
 
         // TODO Project 3-2: Part 1
         // Implement MirrorBSDF
-        return Vector3D();
+        
+        // Set pdf to 1 to handle delta BSDF
+        *pdf = 1;
+        
+        // Store reflection of wo about normal in wi
+        reflect(wo, wi);
+        return reflectance / abs_cos_theta(*wi);
     }
 
     void MirrorBSDF::render_debugger_node()
@@ -144,6 +150,14 @@ namespace CGL {
     Vector3D RefractionBSDF::sample_f(const Vector3D wo, Vector3D* wi, double* pdf) {
         // TODO Project 3-2: Part 1
         // Implement RefractionBSDF
+        bool refracted = refract(wo, wi, ior);
+        
+        if (refracted) {
+            *pdf = 1;
+            double eta = wo.z > 0 ? 1.0/ior : ior;
+            return transmittance / abs_cos_theta(*wi) / pow(eta, 2);
+        }
+
         return Vector3D();
     }
 
@@ -170,7 +184,29 @@ namespace CGL {
 
         // compute Fresnel coefficient and use it as the probability of reflection
         // - Fundamentals of Computer Graphics page 305
-        return Vector3D();
+        // Check for total internal reflection
+        double eta = wo.z > 0 ? 1.0/ior : ior;
+        if (1 - pow(eta, 2) * (1 - pow(wo.z, 2)) < 0) {
+            reflect(wo, wi);
+            *pdf = 1;
+            return reflectance / abs_cos_theta(*wi);
+        }
+        
+        // Calculate Schlick's reflection coefficient R
+        double n1 = 1.0;
+        double n2 = ior;
+        double R0 = pow(((n1 - n2) / (n1 + n2)), 2);
+        double R = R0 + (1.0 - R0) * pow((1.0 - abs_cos_theta(wo)), 5);
+        
+        if (coin_flip(R)) {
+            bool refracted = refract(wo, wi, ior);
+            *pdf = R;
+            return R * reflectance / abs_cos_theta(*wi);
+        } else {
+            bool refracted = refract(wo, wi, ior);
+            *pdf = 1.0-R;
+            return (1.0-R) * transmittance / abs_cos_theta(*wi) / pow(eta, 2);
+        }
     }
 
     void GlassBSDF::render_debugger_node()
@@ -199,7 +235,20 @@ namespace CGL {
         // Return false if refraction does not occur due to total internal reflection
         // and true otherwise. When dot(wo,n) is positive, then wo corresponds to a
         // ray entering the surface through vacuum.
+        double eta = wo.z > 0 ? 1.0/ior : ior;
 
+        // Check for total internal reflection
+        if (1 - pow(eta, 2) * (1 - pow(wo.z, 2)) < 0) {
+            return false;
+        }
+        
+        // Set wi according to eta and the sign of wo.z
+        wi->x = -eta * wo.x;
+        wi->y = -eta * wo.y;
+        
+        int sign_z = wo.z > 0 ? 1 : -1;
+        wi->z = (-1 * sign_z) * sqrt(1 - pow(eta, 2) * (1 - pow(wo.z, 2)));
+        
         return true;
 
     }
