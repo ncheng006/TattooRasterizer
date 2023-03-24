@@ -95,23 +95,75 @@
         <p><b>
             Show a screenshot sequence of 4 images of scene `CBdragon_microfacet_au.dae` rendered with $\alpha$ set to 0.005, 0.05, 0.25 and 0.5. The other settings should be at least 128 samples per pixel and 1 samples per light. The number of bounces should be at least 5. Describe the differences between different images. Note that, to change the $\alpha$, just open the .dae file and search for `microfacet`.
         </b></p>
+        <div align="middle">
+            <table style="width:100%">
+              <tr align="center">
+                <td>
+                  <img src="images/CBdragon_005.png" align="middle" width="400px"/>
+                  <figcaption>alpha = 0.005 (CBdragon_microfacet_au.dae)</figcaption>
+                </td>
+                <td>
+                  <img src="images/CBdragon_05.png" align="middle" width="400px"/>
+                  <figcaption>alpha = 0.05 (CBdragon_microfacet_au.dae)</figcaption>
+                </td>
+              </tr>
+              <tr align="center">
+                <td>
+                  <img src="images/CBdragon_25.png" align="middle" width="400px"/>
+                  <figcaption>alpha = 0.25 (CBdragon_microfacet_au.dae)</figcaption>
+                </td>
+                <td>
+                  <img src="images/CBdragon_5.png" align="middle" width="400px"/>
+                  <figcaption>alpha = 0.5 (CBdragon_microfacet_au.dae)</figcaption>
+                </td>
+              </tr>
+            </table>
+          </div>
+        <br>
         <p>
-            Your response goes here.
+          Alpha is the smoothness of the macro surface. We can tell from these images that the smaller the alpha value is, the darker the surface appears to be. At alpha=0.005, the dragon appears to be much darker than when alpha is set to 0.5. The smaller alpha is, the smoother the surface is and the less light it diffuses. This is why we see that smaller alpha values result in a much darker object. The higher alpha is, the more bumpy the surface is and the more light is diffused.
         </p>
         <br>
         <p><b>
             Show two images of scene `CBbunny_microfacet_cu.dae` rendered using cosine hemisphere sampling (default) and your importance sampling. The sampling rate should be fixed at 64 samples per pixel and 1 samples per light. The number of bounces should be at least 5. Briefly discuss their difference.
         </b></p>
+        <div align="middle">
+            <table style="width:100%">
+              <tr align="center">
+                <td>
+                  <img src="images/CBbunny_hemisphere.png" align="middle" width="400px"/>
+                  <figcaption>Hemisphere Sampling (CBbunny_microfacet_cu.dae)</figcaption>
+                </td>
+                <td>
+                  <img src="images/CBbunny_importance.png" align="middle" width="400px"/>
+                  <figcaption>Importance Sampling (CBbunny_microfacet_cu.dae)</figcaption>
+                </td>
+              </tr>
+            </table>
+          </div>
+        <br>
         <p>
-            Your response goes here.
+          We can see that the image hemisphere sampling produces is much noisier than the one importance sampling produces. The hemisphere sampling image captures less qualities of the microfacet material compared to importance sampling, making the image appear a lot darker. This is because hemisphere sampling evenly samples over a hemisphere while importance sampling takes more samples on areas that are more important and complex. Thus, we see that the image importance sampling produces captures the material much better and produces and image with much less noise.
         </p>
         <br>
         <p><b>
             Show at least one image with some other conductor material, replacing `eta` and `k`. Note that you should look up values for real data rather than modifying them arbitrarily. Tell us what kind of material your parameters correspond to. 
         </b></p>
-        <p>
-            Your response goes here.
-        </p>
+        <br>
+        <div align="middle">
+            <table style="width:100%">
+              <tr align="center">
+                <td>
+                  <img src="images/CBbunny_Ni.png" align="middle" width="400px"/>
+                  <figcaption>Nickel (alpha=0.05) (CBbunny_microfacet_cu.dae)</figcaption>
+                </td>
+                <td>
+                  <img src="images/CBbunny_Zn.png" align="middle" width="400px"/>
+                  <figcaption>Zinc (alpha=0.05)  (CBbunny_microfacet_cu.dae)</figcaption>
+                </td>
+              </tr>
+            </table>
+          </div>
         <br>
         
     </div>
