@@ -113,7 +113,7 @@ namespace CGL {
 
         // Check wi
         if (wi->z < 0) {
-          pdf = 0;
+          *pdf = 0;
           return Vector3D();
         }
 
