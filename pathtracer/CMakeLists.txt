@@ -74,6 +74,19 @@ set(APPLICATION_3_2_SOURCE
     src/imgui/imgui_tables.cpp
     src/imgui/backends/imgui_impl_glfw.cpp
     src/imgui/backends/imgui_impl_opengl2.cpp
+
+
+    # Scene Object & Structure
+    src/scene/sphere.cpp
+    src/scene/triangle.cpp
+    src/scene/light.cpp
+    src/scene/bvh.cpp
+    src/scene/bbox.cpp
+
+    # Pathtracer
+    src/pathtracer/camera.cpp
+    src/pathtracer/bsdf.cpp
+    src/pathtracer/pathtracer.cpp
 )
 
 set(APPLICATION_HEADERS
