@@ -8,6 +8,7 @@
 
 #include "scene.h"  // SceneLight
 #include "object.h" // Mesh, SphereObject
+#include "triangle.h"
 
 namespace CGL { namespace SceneObjects {
 
@@ -76,7 +77,7 @@ class SpotLight : public SceneLight {
 // Area Light //
 
 class AreaLight : public SceneLight {
- public:
+public:
   AreaLight(const Vector3D rad, 
             const Vector3D pos,   const Vector3D dir, 
             const Vector3D dim_x, const Vector3D dim_y);
@@ -91,6 +92,15 @@ class AreaLight : public SceneLight {
   Vector3D dim_y;
   UniformGridSampler2D sampler;
   double area;
+
+  virtual std::vector<Primitive*> get_primitives() const;
+  virtual BSDF* get_bsdf() const;
+
+private:
+  Triangle tri0, tri1;
+  EmissionBSDF bsdf;
+
+  std::vector<Primitive*> prims;
 
 }; // class AreaLight
 

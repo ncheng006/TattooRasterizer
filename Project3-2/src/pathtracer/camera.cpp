@@ -189,25 +189,13 @@ void Camera::load_settings(string filename) {
  */
 Ray Camera::generate_ray(double x, double y) const {
 
-  // TODO (Part 1.1):
+  // TODO Project 3-2: Part 4 (Optional, Reference Project 3-1: Part 1):
   // compute position of the input sensor sample coordinate on the
   // canonical sensor plane one unit away from the pinhole.
   // Note: hFov and vFov are in degrees.
-  
-  // Convert hFov and vFov to radians
-  double hRad = hFov * M_PI / 180;
-  double vRad = vFov * M_PI / 180;
-  // Transform the image coordinates into camera space
-  Vector3D cameraCoordinates = Vector3D(2 * tan(0.5 * hRad) * (x-0.5), 2 * tan(0.5 * vRad) * (y-0.5), -1);
-  // Generate the ray in the camera space
-  Vector3D cameraRay = c2w * cameraCoordinates;
-  cameraRay.normalize();
-  // Transform ray into world space
-  Ray resultRay = Ray(pos, cameraRay);
-  resultRay.min_t = nClip;
-  resultRay.max_t = fClip;
+  //
 
-  return resultRay;
+  return Ray(pos, Vector3D(0, 0, -1));
 
 }
 

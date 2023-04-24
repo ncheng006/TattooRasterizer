@@ -624,7 +624,7 @@
           </bind_material>
         </instance_geometry>
       </node>
-      <node id="light" name="light" type="NODE">
+      <!--<node id="light" name="light" type="NODE">
         <matrix sid="transform">-1 2.69452e-14 1.50996e-7 -2.62268e-8 1.50996e-7 1.62921e-7 1 0.004315853 2.34488e-15 1 -1.62921e-7 0 0 0 0 1</matrix>
         <instance_geometry url="#light-mesh">
           <bind_material>
@@ -633,7 +633,7 @@
             </technique_common>
           </bind_material>
         </instance_geometry>
-      </node>
+      </node>-->
       <node id="floor" name="floor" type="NODE">
         <matrix sid="transform">-1 2.69452e-14 1.50996e-7 -2.62268e-8 1.50996e-7 1.62921e-7 1 0 2.34488e-15 1 -1.62921e-7 0 0 0 0 1</matrix>
         <instance_geometry url="#floor-mesh">

@@ -22,68 +22,25 @@ Triangle::Triangle(const Mesh *mesh, size_t v1, size_t v2, size_t v3) {
 
 BBox Triangle::get_bbox() const { return bbox; }
 
-Vector3D mollerTrumbore(const Ray &r, Vector3D p1, Vector3D p2, Vector3D p3) {
-  // Helper function that applies the Moller Trumbore algorithm and returns a vector [t, b1, b2]
-  Vector3D e1 = p2 - p1;
-  Vector3D e2 = p3 - p1;
-  Vector3D s = r.o - p1;
-  Vector3D s1 = cross(r.d, e2);
-  Vector3D s2 = cross(s, e1);
-  
-  return (1/dot(s1, e1)) * Vector3D(dot(s2, e2), dot(s1, s), dot(s2, r.d));
-}
-
 bool Triangle::has_intersection(const Ray &r) const {
   // Part 1, Task 3: implement ray-triangle intersection
   // The difference between this function and the next function is that the next
   // function records the "intersection" while this function only tests whether
   // there is a intersection.
-  
-  Vector3D mtResult = mollerTrumbore(r, p1, p2, p3);
-  double t = mtResult[0];
-  double b1 = mtResult[1];
-  double b2 = mtResult[2];
-  double b0 = 1 - b1 - b2;
-  bool b1Valid = b1 <= 1 && b1 >= 0;
-  bool b2Valid = b2 <= 1 && b2 >= 0;
-  bool b0Valid = b0 <= 1 && b0 >= 0;
-  // Check if t is within the min and max t
-  if (t >= r.min_t && t <= r.max_t && b1Valid && b2Valid && b0Valid) {
-    // Update the max t of the ray
-    r.max_t = t;
-    return true;
-  }
-  return false;
 
+
+
+  return true;
 }
 
 bool Triangle::intersect(const Ray &r, Intersection *isect) const {
   // Part 1, Task 3:
   // implement ray-triangle intersection. When an intersection takes
   // place, the Intersection data should be updated accordingly
-  Vector3D mtResult = mollerTrumbore(r, p1, p2, p3);
-  
-  double t = mtResult[0];
-  double b1 = mtResult[1];
-  double b2 = mtResult[2];
-  double b0 = 1 - b1 - b2;
-  bool b1Valid = b1 <= 1 && b1 >= 0;
-  bool b2Valid = b2 <= 1 && b2 >= 0;
-  bool b0Valid = b0 <= 1 && b0 >= 0;
-  // Check if t is within the min and max t
-  if (t >= r.min_t && t <= r.max_t && b1Valid && b2Valid && b0Valid) {
-    // Update the max t of the ray
-    r.max_t = t;
-  
-    // Update intersection data
-    isect->t = t;
-    isect->n = b0 * n1 + b1 * n2 + b2 * n3;
-    isect->primitive = this;
-    isect->bsdf = get_bsdf();
-    
-    return true;
-  }
-  return false;
+
+
+
+  return true;
 }
 
 void Triangle::draw(const Color &c, float alpha) const {

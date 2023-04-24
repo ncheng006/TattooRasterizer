@@ -32,11 +32,17 @@ class SceneObject {
 /**
  * Interface for lights in the scene.
  */
-class SceneLight {
+class SceneLight : public SceneObject {
  public:
   virtual Vector3D sample_L(const Vector3D p, Vector3D* wi,
                             double* distToLight, double* pdf) const = 0;
   virtual bool is_delta_light() const = 0;
+
+  // Provide default implementation of SceneObject member functions
+  virtual std::vector<Primitive*> get_primitives() const {
+    return {};
+  }
+  virtual BSDF* get_bsdf() const { return nullptr; };
 
 };
 

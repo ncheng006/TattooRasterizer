@@ -163,6 +163,7 @@ SceneObjects::Scene *Scene::get_static_scene() {
     staticObjects.push_back(obj->get_static_object());
   }
   for (SceneLight *light : lights) {
+    staticObjects.push_back(light->get_static_light());
     staticLights.push_back(light->get_static_light());
   }
 

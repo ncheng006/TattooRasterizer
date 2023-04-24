@@ -1,4 +1,6 @@
 #include "light.h"
+#include "light.h"
+#include "light.h"
 
 #include <iostream>
 
@@ -76,7 +78,31 @@ AreaLight::AreaLight(const Vector3D rad,
                      const Vector3D pos,   const Vector3D dir, 
                      const Vector3D dim_x, const Vector3D dim_y)
   : radiance(rad), position(pos), direction(dir),
-    dim_x(dim_x), dim_y(dim_y), area(dim_x.norm() * dim_y.norm()) { }
+    dim_x(dim_x), dim_y(dim_y), area(dim_x.norm() * dim_y.norm()), bsdf(rad / area, dir) {
+
+  BBox bbox = BBox(pos);
+  bbox.expand(pos - dim_x * 0.5 - dim_y * 0.5);
+  bbox.expand(pos + dim_x * 0.5 + dim_y * 0.5);
+
+  tri0.bbox = bbox;
+  tri1.bbox = bbox;
+
+  tri0.bsdf = &bsdf;
+  tri1.bsdf = &bsdf;
+
+  tri0.n1 = dir; tri0.n2 = dir; tri0.n3 = dir;
+  tri1.n1 = dir; tri1.n2 = dir; tri1.n3 = dir;
+
+  tri0.p1 = pos - dim_x * 0.5 - dim_y * 0.5;
+  tri0.p2 = pos + dim_x * 0.5 - dim_y * 0.5;
+  tri0.p3 = pos + dim_x * 0.5 + dim_y * 0.5;
+
+  tri1.p1 = pos - dim_x * 0.5 - dim_y * 0.5;
+  tri1.p2 = pos - dim_x * 0.5 + dim_y * 0.5;
+  tri1.p3 = pos + dim_x * 0.5 + dim_y * 0.5;
+
+  prims = { &tri0, &tri1 };
+}
 
 Vector3D AreaLight::sample_L(const Vector3D p, Vector3D* wi, 
                              double* distToLight, double* pdf) const {
@@ -90,7 +116,17 @@ Vector3D AreaLight::sample_L(const Vector3D p, Vector3D* wi,
   *distToLight = dist;
   *pdf = sqDist / (area * fabs(cosTheta));
   return cosTheta < 0 ? radiance : Vector3D();
-};
+}
+
+std::vector<Primitive*> AreaLight::get_primitives() const
+{
+  return prims;
+}
+
+BSDF* AreaLight::get_bsdf() const
+{
+  return (BSDF*)&bsdf;
+}
 
 
 // Sphere Light //

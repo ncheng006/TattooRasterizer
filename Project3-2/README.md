@@ -1,5 +1,1 @@
-# Project 3-1: Pathtracer
-
-Spring 2023
-
-[Project Spec](https://cs184.eecs.berkeley.edu/sp23/docs/proj3-1)
+Base code copied from the CS184 Pathtracer project (Project 3-2) 
