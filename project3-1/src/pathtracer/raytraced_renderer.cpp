@@ -593,7 +593,7 @@ void RaytracedRenderer::key_press(int key) {
  * in a worker thread.
  */
 void RaytracedRenderer::raytrace_tile(int tile_x, int tile_y,
-                               int tile_w, int tile_h) {
+                                      int tile_w, int tile_h) {
   size_t w = frame_w;
   size_t h = frame_h;
 
@@ -606,14 +606,53 @@ void RaytracedRenderer::raytrace_tile(int tile_x, int tile_y,
   size_t tile_idx_x = tile_x / imageTileSize;
   size_t tile_idx_y = tile_y / imageTileSize;
   size_t num_samples_tile = tile_samples[tile_idx_x + tile_idx_y * num_tiles_w];
+  
+//  vector<Vector3D> data(tile_w * tile_h, Vector3D(0,0,0));
+  vector<Vector3D> data;
 
+  // For each tile raytrace each pixel
   for (size_t y = tile_start_y; y < tile_end_y; y++) {
     if (!continueRaytracing) return;
     for (size_t x = tile_start_x; x < tile_end_x; x++) {
-      pt->raytrace_pixel(x, y);
+      pt->raytrace_pixel(x, y, data, tile_w);
     }
   }
-
+//  // Iterate through the sample_buffer to calculate the average for the tile
+//  Vector3D avg = Vector3D(0,0,0);
+//  for (size_t y = tile_start_y; y < tile_end_y; y++) {
+//    for (size_t x = tile_start_x; x < tile_end_x; x++) {
+//      int i = x * tile_w + y;
+//      avg += data[i];
+//    }
+//  }
+//  avg = avg / (tile_w * tile_h);
+  
+//  // Iterate through pixels in the frameBuffer, updating only a certain number of pixels according to the value
+//  float probability = avg.x * 5; // never want complete opaqueness
+//  if (probability < 0) {probability = 0;}
+//  if (probability > 1) {probability = 1;}
+//  cout << probability << "  ";
+//  // Make random generator
+//  vector<int> vals(10, 0);
+//  for (int i = 0; i < probability * 10; i++) {
+//    vals[i] = 1;
+//  }
+  
+//  Vector3D black = Vector3D(0,0,0);
+//  Vector3D white = Vector3D(255,255,255);
+//  for (size_t y = tile_start_y; y < tile_end_y; y++) {
+//    for (size_t x = tile_start_x; x < tile_end_x; x++) {
+//      int random = rand() % 10; // random value between 0-9
+//      if (vals[random]) {
+//        pt->update_pixel(black, x, y);
+//      } else {
+//        pt->update_pixel(white, x, y);
+//      }
+//      pt->update_pixel(data[y*tile_w+x], x, y);
+//
+//    }
+//  }
+  
   tile_samples[tile_idx_x + tile_idx_y * num_tiles_w] += 1;
 
   pt->write_to_framebuffer(frameBuffer, tile_start_x, tile_start_y, tile_end_x, tile_end_y);

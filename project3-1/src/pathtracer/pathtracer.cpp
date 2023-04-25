@@ -235,16 +235,16 @@ Vector3D PathTracer::est_radiance_global_illumination(const Ray &r) {
 
   // TODO (Part 3): Return the direct illumination.
 //  L_out = estimate_direct_lighting_importance(r, isect) + zero_bounce_radiance(r, isect) ;
-//  L_out = estimate_direct_lighting_hemisphere(r, isect) + zero_bounce_radiance(r, isect) ;
+  L_out = estimate_direct_lighting_hemisphere(r, isect) + zero_bounce_radiance(r, isect) ;
   // TODO (Part 4): Accumulate the "direct" and "indirect"
   // parts of global illumination into L_out rather than just direct
 //  L_out = zero_bounce_radiance(r, isect) + at_least_one_bounce_radiance(r, isect);
-  L_out = at_least_one_bounce_radiance(r, isect);
+//  L_out = at_least_one_bounce_radiance(r, isect);
 
   return L_out;
 }
 
-void PathTracer::raytrace_pixel(size_t x, size_t y) {
+void PathTracer::raytrace_pixel(size_t x, size_t y, vector<Vector3D>& data, int numCols) {
   // TODO (Part 1.2):
   // Make a loop that generates num_samples camera rays and traces them
   // through the scene. Return the average Vector3D.
@@ -288,11 +288,37 @@ void PathTracer::raytrace_pixel(size_t x, size_t y) {
     }
   }
   average = average/actualNumSamples;
+  
+  // Convert to grayscale
+  double rgb_avg = (average.x + average.y + average.z)/3;
+  Vector3D grayscale_color = Vector3D(rgb_avg, rgb_avg, rgb_avg);
+  
+    float probability = rgb_avg + 0.035; // never want complete opaqueness
+    if (probability < 0) {probability = 0;}
+    if (probability > 1) {probability = 1;}
+    // Make random generator
+    vector<int> vals(50, 0);
+    for (int i = 0; i < probability * 50; i++) {
+      vals[i] = 1;
+    }
+  
+  int random = rand() % 10; // random value between 0-9
+  if (!vals[random]) {
+    grayscale_color = Vector3D(0,0,0); // black
+  } else {
+    grayscale_color = Vector3D(1,1,1); // white
+  }
 
-  sampleBuffer.update_pixel(average, x, y);
+  sampleBuffer.update_pixel(grayscale_color, x, y);
   sampleCountBuffer[x + y * sampleBuffer.w] = actualNumSamples;
+//  data[x * numCols + y] = grayscale_color;
+//  data.push_back(grayscale_color);
+//  cout << grayscale_color << "  ";
 }
 
+//void PathTracer::update_pixel(Vector3D color, int x, int y) {
+//  sampleBuffer.update_pixel(color, x, y);
+//}
 void PathTracer::autofocus(Vector2D loc) {
   Ray r = camera->generate_ray(loc.x / sampleBuffer.w, loc.y / sampleBuffer.h);
   Intersection isect;

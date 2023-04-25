@@ -66,7 +66,9 @@ namespace CGL {
         /**
          * Trace a camera ray given by the pixel coordinate.
          */
-        void raytrace_pixel(size_t x, size_t y);
+        void raytrace_pixel(size_t x, size_t y, vector<Vector3D>& data, int numCols);
+      
+        void update_pixel(Vector3D color, int x, int y);
 
         // Integrator sampling settings //
 
