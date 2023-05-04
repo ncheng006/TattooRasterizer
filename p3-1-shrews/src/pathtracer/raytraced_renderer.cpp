@@ -643,7 +643,7 @@ void RaytracedRenderer::key_press(int key) {
                 if (y == 0 || y == frame_h - 1 || x == 0 || x == frame_w - 1) {
                     //set the pixel to black
                     frameBuffer.update_pixel(Color(0, 0, 0), x, y);
-                } else {
+                } else if (!(y == tile_end_y -1 || x == tile_end_x - 1)) {
                     is_edge(x, y);
                 }
             }
@@ -679,7 +679,7 @@ void RaytracedRenderer::key_press(int key) {
         //threshold magnitude
         if (magnitude > 7000000) {
 
-            frameBuffer.update_pixel(Color(0, 0, 0), x, y);
+            frameBuffer.update_pixel(Color(0, 0, 0), x-1, y-1);
             return true;
         }
         return false;
