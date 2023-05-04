@@ -640,9 +640,11 @@ void RaytracedRenderer::key_press(int key) {
         for (size_t y = tile_start_y; y < tile_end_y; y++) {
             for (size_t x = tile_start_x; x < tile_end_x; x++) {
                 // Compute edge detection using a suitable algorithm (e.g. Sobel, Canny)
-                if (is_edge(x, y)) {
+                if (y == 0 || y == frame_h - 1 || x == 0 || x == frame_w - 1) {
                     //set the pixel to black
                     frameBuffer.update_pixel(Color(0, 0, 0), x, y);
+                } else {
+                    is_edge(x, y);
                 }
             }
         }
@@ -651,7 +653,7 @@ void RaytracedRenderer::key_press(int key) {
         tile_samples[tile_idx_x + tile_idx_y * num_tiles_w] += 1;
     }
 
-    bool RaytracedRenderer::is_edge(int x, int y) {
+    bool RaytracedRenderer::is_edge(size_t x, size_t y) {
         //create kernels for sobel operator
         float sobel_x[3][3] = {{-1, 0, 1},
                                {-2, 0, 2},
@@ -659,32 +661,32 @@ void RaytracedRenderer::key_press(int key) {
         float sobel_y[3][3] = {{-1, -2, -1},
                                {0, 0, 0},
                                {1, 2, 1}};
+        
+        size_t w = frameBuffer.w;
+        size_t h = frameBuffer.h;
         //apply sobel operator to pixel
         float sobel_x_sum = 0;
         float sobel_y_sum = 0;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                int corresponding_pixel = frameBuffer.data[3*((y + i - 1) * frameBuffer.w + (x + j - 1))];
+                int corresponding_pixel = frameBuffer.data[((y + i - 1) * frameBuffer.w + (x + j - 1))];
                 sobel_x_sum += sobel_x[i][j] * corresponding_pixel;
                 sobel_y_sum += sobel_y[i][j] * corresponding_pixel;
             }
         }
         //compute magnitude of gradient
-        float magnitude = sqrt(sobel_x_sum * sobel_x_sum + sobel_y_sum * sobel_y_sum);
+        float magnitude = sqrt(pow(sobel_x_sum, 2) + pow(sobel_y_sum, 2));
         //threshold magnitude
-        if (magnitude > 60.0) {
+        if (magnitude > 7000000) {
+
+            frameBuffer.update_pixel(Color(0, 0, 0), x, y);
             return true;
         }
         return false;
 
     }
 
-
-
-
-
-
-    void RaytracedRenderer::raytrace_cell(ImageBuffer& buffer) {
+void RaytracedRenderer::raytrace_cell(ImageBuffer& buffer) {
   size_t tile_start_x = cell_tl.x;
   size_t tile_start_y = cell_tl.y;
 
